@@ -107,7 +107,7 @@ func (ks *KeyStore[T]) Clean() {
 
 // StartCleanup starts a goroutine that periodically deletes all expired keys from the keystore.
 func (ks *KeyStore[T]) StartCleanup(cleanupInterval time.Duration) {
-	if cleanupInterval == 0 {
+	if cleanupInterval <= 0 {
 		return
 	}
 
@@ -131,7 +131,7 @@ func (ks *KeyStore[T]) StopCleanup() {
 	ks.mu.Lock()
 	defer ks.mu.Unlock()
 
-	if ks.cleanupInterval != 0 {
+	if ks.cleanupInterval > 0 {
 		close(ks.stopChan)
 		ks.cleanupInterval = 0
 	}
